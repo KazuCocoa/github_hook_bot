@@ -7,6 +7,14 @@ defmodule GithubHookBot.Github.Repository do
 
   alias GithubHookBot.Github.Repository.Issue
 
+  @type t ::%__MODULE__{ id:        integer,
+                         name:      String.t,
+                         full_name: String.t,
+                         url:       String.t,
+                         http_url:  String.t,
+                         issue:     %Issue{}
+                       }
+
   defstruct [
     :id,            # 1234
     :name,          # "Hello-World",

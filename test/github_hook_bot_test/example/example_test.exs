@@ -26,11 +26,13 @@ defmodule GithubHookBotTest.Example.ExampleTest do
     test "without created action" do
       action = %Action{}
                |> put_in([Access.key(:repository)], @test_repository)
+               |> put_in([Access.key(:action)], :add_comment)
+               |> put_in([Access.key(:issue_number)], 12345)
                |> put_in([Access.key(:hook), Access.key(:repository), Access.key(:full_name)], @test_repository)
-      result = action
                |> Client.get_new_comment
-
-      assert result.comment == "hook is arrived in #{@test_repository}"
+      result = action
+               |> Action.post()
+      assert result == {:ok, "add_comment to 12345, message is hook is arrived in example/sample1"}
     end
 
     test "with created action" do
