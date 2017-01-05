@@ -8,10 +8,10 @@ defmodule GithubHookBotTest.Example.Client.Sample1 do
 
   defstruct [repository_name: @repository]
 
-  def comment_message(%Action{hook: %Hook{action: "created"}} = param) do
+  def response_message(%Action{hook: %Hook{action: "created"}} = param) do
     param |> put_in([Access.key(:comment)], "new issue is created")
   end
-  def comment_message(%Action{} = param) do
+  def response_message(%Action{} = param) do
     param |> put_in([Access.key(:comment)], "hook is arrived in #{@repository}")
   end
 

@@ -27,11 +27,11 @@ defmodule GithubHookBot.Client.Action do
     hook: %Hook{}
   ]
 
-  def post(%Action{action: :add_comment, issue_number: issue_number, comment: message}) do
+  def response(%Action{action: :add_comment, issue_number: issue_number, comment: message}) do
     {:ok, "add_comment to #{issue_number}, message is #{message}"}
   end
 
-  def post(%Action{action: :add_labels}) do
+  def response(%Action{action: :add_labels}) do
     {:ok, "blank"}
   end
 end

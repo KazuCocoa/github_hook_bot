@@ -6,7 +6,7 @@ defmodule GithubHookBotTest.Example.ExampleTest.Client do
   @repository_name "example/sample1"
 
   def get_new_comment(%Action{repository: @repository_name} = param) do
-    param |> Sample1.comment_message()
+    param |> Sample1.response_message()
   end
 
   def get_new_labels(%Action{repository: @repository_name} = param) do
@@ -31,7 +31,7 @@ defmodule GithubHookBotTest.Example.ExampleTest do
                |> put_in([Access.key(:hook), Access.key(:repository), Access.key(:full_name)], @test_repository)
                |> Client.get_new_comment
       result = action
-               |> Action.post()
+               |> Action.response()
       assert result == {:ok, "add_comment to 12345, message is hook is arrived in example/sample1"}
     end
 

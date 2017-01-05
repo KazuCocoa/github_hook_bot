@@ -5,8 +5,8 @@ defmodule GithubHookBot.Client.BaseAction do
   @type param :: %Action{}
   @type result :: %Action{}
 
-  @callback comment_message(param) :: result
+  @callback response_message(param) :: result
   @callback new_labels(param) :: result
 
-  @optional_callbacks comment_message: 1, new_labels: 1
+  @optional_callbacks response_message: 1, new_labels: 1
 end
