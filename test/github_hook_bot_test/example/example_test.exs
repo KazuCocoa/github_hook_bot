@@ -30,29 +30,34 @@ defmodule GithubHookBotTest.Example.ExampleTest do
                |> put_in([Access.key(:issue_number)], 12345)
                |> put_in([Access.key(:hook), Access.key(:repository), Access.key(:full_name)], @test_repository)
                |> Client.get_new_comment
-      result = action
-               |> Action.response()
-      assert result == {:ok, "add_comment to 12345, message is hook is arrived in example/sample1"}
+      {:ok, result} = action
+                      |> Action.response
+      assert result.comment == "add_comment to 12345, message is hook is arrived in example/sample1"
     end
 
     test "with created action" do
       action = %Action{}
                |> put_in([Access.key(:repository)], @test_repository)
+               |> put_in([Access.key(:action)], :add_comment)
+               |> put_in([Access.key(:issue_number)], 12345)
                |> put_in([Access.key(:hook), Access.key(:repository), Access.key(:full_name)], @test_repository)
                |> put_in([Access.key(:hook), Access.key(:action)], "created")
-      result = action
                |> Client.get_new_comment
-
-      assert result.comment == "new issue is created"
+     {:ok, result} = action
+                     |> Action.response
+      assert result.comment == "add_comment to 12345, message is new issue is created"
     end
   end
 
   test "get new labels" do
     action = %Action{}
              |> put_in([Access.key(:repository)], @test_repository)
+             |> put_in([Access.key(:action)], :add_labels)
+             |> put_in([Access.key(:issue_number)], 12345)
              |> put_in([Access.key(:hook), Access.key(:repository), Access.key(:full_name)], @test_repository)
-    result = action
              |> Client.get_new_labels
+   {:ok, result} = action
+                   |> Action.response
 
     assert result.labels == ["a", "b", "c"]
   end

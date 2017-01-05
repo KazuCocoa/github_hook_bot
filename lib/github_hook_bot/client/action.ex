@@ -6,7 +6,7 @@ defmodule GithubHookBot.Client.Action do
   @type action :: :add_comment | :add_labels
   @type t ::%__MODULE__{ action: action,
                          comment: String.t,
-                         labels: String.t,
+                         labels: [String.t],
                          repository: String.t,
                          issue_number: integer,
                          hook: %Hook{}
@@ -27,11 +27,18 @@ defmodule GithubHookBot.Client.Action do
     hook: %Hook{}
   ]
 
-  def response(%Action{action: :add_comment, issue_number: issue_number, comment: message}) do
-    {:ok, "add_comment to #{issue_number}, message is #{message}"}
+  @spec response(t) :: t
+  def response(%Action{action: :add_comment, issue_number: issue_number, comment: message} = params) do
+    comment = "add_comment to #{issue_number}, message is #{message}"
+    new_params = params
+                 |> Map.put(:comment, comment)
+    {:ok, new_params}
   end
 
-  def response(%Action{action: :add_labels}) do
-    {:ok, "blank"}
+  def response(%Action{action: :add_labels} = params) do
+    labels = ["a", "b", "c"]
+    new_params = params
+                 |> Map.put(:labels, labels)
+    {:ok, new_params}
   end
 end
