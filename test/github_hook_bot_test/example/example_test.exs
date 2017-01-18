@@ -1,9 +1,18 @@
-defmodule GithubHookBotTest.Example.ExampleTest.Client do
-  alias GithubHookBot.Client.Action
+defmodule GithubHookBotTest.Example.ExampleTest.Client.Neko do
+  def neko() do
+    1 + 1
+  end
+end
 
+defmodule GithubHookBotTest.Example.ExampleTest.Client do
+  use GithubHookBot.Client.Plug
+
+  alias GithubHookBot.Client.Action
   alias GithubHookBotTest.Example.Client.Sample1
 
   @repository_name "example/sample1"
+
+  plug GithubHookBotTest.Example.ExampleTest.Client.Neko.neko
 
   def get_new_comment(%Action{repository: @repository_name} = param) do
     param |> Sample1.response_message()
@@ -25,10 +34,10 @@ defmodule GithubHookBotTest.Example.ExampleTest do
   describe "get new message" do
     test "without created action" do
       action = %Action{}
-               |> put_in([Access.key(:repository)], @test_repository)
-               |> put_in([Access.key(:action)], :add_comment)
-               |> put_in([Access.key(:issue_number)], 12345)
-               |> put_in([Access.key(:hook), Access.key(:repository), Access.key(:full_name)], @test_repository)
+               |> put_in([Access.key!(:repository)], @test_repository)
+               |> put_in([Access.key!(:action)], :add_comment)
+               |> put_in([Access.key!(:issue_number)], 12345)
+               |> put_in([Access.key!(:hook), Access.key!(:repository), Access.key!(:full_name)], @test_repository)
                |> Client.get_new_comment
       {:ok, result} = action
                       |> Action.response
@@ -37,11 +46,11 @@ defmodule GithubHookBotTest.Example.ExampleTest do
 
     test "with created action" do
       action = %Action{}
-               |> put_in([Access.key(:repository)], @test_repository)
-               |> put_in([Access.key(:action)], :add_comment)
-               |> put_in([Access.key(:issue_number)], 12345)
-               |> put_in([Access.key(:hook), Access.key(:repository), Access.key(:full_name)], @test_repository)
-               |> put_in([Access.key(:hook), Access.key(:action)], "created")
+               |> put_in([Access.key!(:repository)], @test_repository)
+               |> put_in([Access.key!(:action)], :add_comment)
+               |> put_in([Access.key!(:issue_number)], 12345)
+               |> put_in([Access.key!(:hook), Access.key!(:repository), Access.key!(:full_name)], @test_repository)
+               |> put_in([Access.key!(:hook), Access.key!(:action)], "created")
                |> Client.get_new_comment
      {:ok, result} = action
                      |> Action.response
@@ -51,10 +60,10 @@ defmodule GithubHookBotTest.Example.ExampleTest do
 
   test "get new labels" do
     action = %Action{}
-             |> put_in([Access.key(:repository)], @test_repository)
-             |> put_in([Access.key(:action)], :add_labels)
-             |> put_in([Access.key(:issue_number)], 12345)
-             |> put_in([Access.key(:hook), Access.key(:repository), Access.key(:full_name)], @test_repository)
+             |> put_in([Access.key!(:repository)], @test_repository)
+             |> put_in([Access.key!(:action)], :add_labels)
+             |> put_in([Access.key!(:issue_number)], 12345)
+             |> put_in([Access.key!(:hook), Access.key!(:repository), Access.key!(:full_name)], @test_repository)
              |> Client.get_new_labels
    {:ok, result} = action
                    |> Action.response
